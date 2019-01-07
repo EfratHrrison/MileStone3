@@ -34,9 +34,7 @@ void FileCacheManager<P,S>::loadFile() {
 
 template <class P,class S>
 void FileCacheManager<P,S>::addSolution(P problem, S solution) {
-    FileCacheM.open ("solutions.txt");
-    //FileCacheM << problem +"\n";
-    //FileCacheM << solution +"\n";
+    FileCacheM.open ("solutions.txt", ofstream::out | ostream::app);
     FileCacheM << problem << "$" <<solution << endl;
     FileCacheM.close();
     this->solutionsMap.insert(pair<string,string>(problem,solution));
