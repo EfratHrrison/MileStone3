@@ -12,7 +12,4 @@ int main() {
     test.open(5400,cH);
     stringRevers *Sr=new stringRevers();
     string neta=Sr->solve("efrart");
-
-
-
 }
