@@ -10,6 +10,7 @@ void MyTestClientHandler::handleClient(int clientSock) {
     string problem="";
     string solution="";
     int clilen;
+    char* chr;
 
     //efrat harrison
     ssize_t n;
@@ -24,6 +25,7 @@ void MyTestClientHandler::handleClient(int clientSock) {
         if(buffer=="end") {
             return;
         }
+        printf("the message: %s\n", buffer);
         if (n < 0) {
             perror("ERROR reading from socket");
             exit(1);
@@ -31,10 +33,14 @@ void MyTestClientHandler::handleClient(int clientSock) {
 
         if(!this->cacheManager->haveSolution(buffer)){
             solution = this->solver->solve(buffer);
-            this->cacheManager->addSolution(solution, buffer);
+            this->cacheManager->updateSolutions(buffer,solution);
+            this->cacheManager->addSolution(buffer,solution);
+        }else{
+            solution = this->cacheManager->getSolution(buffer);
         }
-        solution = this->cacheManager->getSolution(buffer);
-        ssize_t n = write(clientSock, solution.c_str(), 1000);
+        chr = const_cast<char *>(solution.c_str());
+        n = write(clientSock, chr, strlen(chr));
+        cout<<solution<<endl;
         if (n < 0) {
             perror("ERROR writing to socket");
             exit(1);

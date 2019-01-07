@@ -16,6 +16,7 @@ public:
     virtual S getSolution(P problem)=0;
     virtual bool haveSolution(P problem)=0;
     virtual void addSolution(P problem, S solution)=0;
+    virtual void updateSolutions(string prob, string solution) = 0;
 };
 
 #endif //MILESTONE2_CACHEMANAGER_H

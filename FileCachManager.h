@@ -22,6 +22,7 @@ public:
     virtual S getSolution(P problem);
     virtual bool haveSolution(P problem);
     virtual void addSolution(P problem, S solution);
+    virtual void updateSolutions(P prob, S solution);
 };
 
 #endif //MILESTONE2_FILECACHMANAGER_H

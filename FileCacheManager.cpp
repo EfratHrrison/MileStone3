@@ -10,17 +10,18 @@ bool FileCacheManager<P,S>::haveSolution(P problem) {
 
 template <class P,class S>
 S FileCacheManager<P,S>::getSolution(P problem){
-    string solution;
-    solution = this->solutionsMap.at(problem);
-    return solution;
+    return this->solutionsMap.find(problem)->second;
 }
 
 template <class P,class S>
 void FileCacheManager<P,S>::loadFile() {
-    FileCacheM.open("solutions.txt");
-    string line="";
-    string solution="";
-    string problem="";
+    string line;
+    string solution;
+    string problem;
+    FileCacheM.open("solutions.txt", ifstream::in | istream::app);
+    if(!FileCacheM){
+        throw "File Faild";
+    }
     while(getline(FileCacheM,line)){
         if (size_t found = line.find("$") != string::npos)
         {
@@ -35,9 +36,17 @@ void FileCacheManager<P,S>::loadFile() {
 template <class P,class S>
 void FileCacheManager<P,S>::addSolution(P problem, S solution) {
     FileCacheM.open ("solutions.txt", ofstream::out | ostream::app);
+    if(!FileCacheM){
+        throw "failed opening file";
+    }
     FileCacheM << problem << "$" <<solution << endl;
     FileCacheM.close();
-    this->solutionsMap.insert(pair<string,string>(problem,solution));
+    //this->solutionsMap.insert(pair<string,string>(problem,solution));
 }
 
+template <class P,class S>
+void FileCacheManager<P,S>::updateSolutions(P prob, S solution) {
+
+    this->solutionsMap.insert(pair<string, string>(prob, solution));
+}
 
