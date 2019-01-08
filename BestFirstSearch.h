@@ -43,7 +43,7 @@ public:
                     }
                 }
             }
-            //n is the goal state
+            //n is the goal state  hgf
             else {
                 while (!n.Equal(searchable->getInitialNode())) {
                     path.push_back(n.getDad().getState());
