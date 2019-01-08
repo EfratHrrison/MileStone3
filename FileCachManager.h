@@ -12,6 +12,7 @@
 #include <string>
 
 template <class P, class S>
+//hiiii
 class FileCacheManager:public CacheManager<P,S> {
 fstream FileCacheM;
 public:
