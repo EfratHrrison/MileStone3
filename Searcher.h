@@ -6,6 +6,7 @@
 #define MILESTONE3_SEARCHER_H
 #include <string>
 #include "Searchable.h"
+#include "vector"
 
 using namespace std;
 
