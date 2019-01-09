@@ -11,6 +11,7 @@ private:
     T state;
     double cost;
     State<T>* cameFrom;
+    double trailCost;
     bool visited;
 public:
     State(T state, double cost) {
@@ -29,15 +30,29 @@ public:
     void setVisited() {
         this->visited = true;
     }
+
     bool ifVisited() {
         return this->visited;
     }
+
     State<T> getDad() {
         return this->cameFrom;
     }
 
+    double getCost() {
+        return this->cost;
+    }
+
     State<T> getState() {
         return state;
+    }
+
+    void setCost(double d) {
+        this->cost = d;
+    }
+
+    double getTrailCost() {
+        return this->trailCost;
     }
 
 };
