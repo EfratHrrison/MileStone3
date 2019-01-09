@@ -8,12 +8,14 @@
 #include "Solver.h"
 #include "CacheManager.h"
 #include <string>
+#include <vector>
 
-class MyTestClientHandler : public ClientHandler {
+class MyClientHandler : public ClientHandler {
     Solver <string,string> *solver;
     CacheManager<string,string> *cacheManager;
 public:
     void handleClient(int clientSock) override;
+    vector<string> explode(string& s, const char& c);
 };
 
 

@@ -52,7 +52,7 @@ public:
                 for (State<T> *s:searchable->getAllPossibleStates(n)) {
                     if (!isExist(open, s->getState()) && closed.count(s) != 0) {
                         //maybe &
-                         s->setCameFrom(n);
+                        s->setCameFrom(n);
                         open.push(s);
                     }
                     else if (s->getCost() > s->getCost() - s->getDad().getCost() + n.getCost()) {
