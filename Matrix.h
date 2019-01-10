@@ -5,6 +5,7 @@
 #ifndef MILESTONE3_MATRIX_H
 #define MILESTONE3_MATRIX_H
 
+#include "string"
 #include "Point.h"
 #include "Searchable.h"
 #include <string>

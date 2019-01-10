@@ -4,6 +4,7 @@
 #ifndef MILESTONE3_SEARCHABLE_H
 #define MILESTONE3_SEARCHABLE_H
 
+#include "string"
 #include "State.h"
 #include <vector>
 #include <string>
