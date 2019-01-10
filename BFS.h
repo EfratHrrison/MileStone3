@@ -19,7 +19,7 @@ using namespace std;
 // adjacency list representation
 template <class T>
 class BFS: public Searcher<T> {
-    vector<State<T>> search(Searchable<T> searchable) override {
+    string search(Searchable<T> searchable) override {
         list<State<T>> openList = searchable.getInitialState();
         searchable.setCurrVisited();
         vector<State<T>> trace;
@@ -28,7 +28,8 @@ class BFS: public Searcher<T> {
             trace.push_back(n);
             openList.pop_front();
             if (n.equals(searchable.getGoalState())) {
-                return trace();
+                //TODO
+                return "";
             }
             list<State<T>> succerssors = searchable.getAllPossibleStates(n);
             for (State<T> state : succerssors) {

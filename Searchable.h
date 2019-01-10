@@ -8,7 +8,6 @@
 #include <vector>
 using namespace std;
 template <class T>
-
 class Searchable {
 protected:
 vector<State<T>*> searchable;

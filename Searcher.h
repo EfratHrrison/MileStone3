@@ -14,7 +14,7 @@ template <class T>
 
 class Searcher {
 public:
-    virtual vector<State<T>> search (Searchable<T> searchable) = 0;
+    virtual string search (Searchable<T>* searchable) = 0;
 
     virtual int getNumberOfNodesEvaluated() = 0;
 };

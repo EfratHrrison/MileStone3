@@ -14,13 +14,10 @@ private:
     double trailCost;
     bool visited;
 public:
-    State(T* state, double cost) {
-        this->state = state;
-        this->visited = false;
+    State(T state, double cost) : state(state), cost(cost) {
         this->cameFrom = nullptr;
-        this->cost = cost;
+        this->trailCost = 0;
     }
-
     bool Equal(State *state1) {
         return (this->state==state1->state);
     }
@@ -43,7 +40,7 @@ public:
         return this->cost;
     }
 
-    T* getState() {
+    T getState() {
         return state;
     }
 

@@ -8,14 +8,14 @@ using namespace std;
 #include <string>
 #include <map>
 
-template <class P,class S>
+
 class CacheManager {
 protected:
     map<string,string> solutionsMap;
 public:
-    virtual S getSolution(P problem)=0;
-    virtual bool haveSolution(P problem)=0;
-    virtual void addSolution(P problem, S solution)=0;
+    virtual string getSolution(string problem)=0;
+    virtual bool haveSolution(string problem)=0;
+    virtual void addSolution(string problem, string solution)=0;
     virtual void updateSolutions(string prob, string solution) = 0;
 };
 

@@ -27,8 +27,8 @@ public:
         return this->y;
     }
 
-    bool operator==(Point* point) {
-        return ((this->x == point->getX()) && (this->y == point->getY()));
+    bool operator==(Point point) {
+        return ((this->x == point.getX()) && (this->y == point.getY()));
     }
 
     void setPoint(int x, int y) {

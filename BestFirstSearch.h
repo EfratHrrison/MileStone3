@@ -38,19 +38,23 @@ public:
         return temp;
     }
 
-    vector<T> search(Searchable<T> *searchable) override {
+    string search(Searchable<T> *searchable) override {
         priority_queue<State<T>*, vector<State<T>*>, Comp> open;
-        unordered_set<State<T>> closed;
-        vector<T> path;
+       vector<State<T>*> closed;
+        string path="";
         double value;
         open.push(searchable->getInitialState());
         while (!open.empty()) {
             State<T> n = open.top();
-            closed.insert(n);
+            closed.push_back(n);
+            if ((n.Equal(searchable->getInitialState())) && n.getCost() == -1) {
+                path = "-1";
+                return path;
+            }
             open.pop();
             if (!n.Equal(searchable->getGoalNode())) {
                 for (State<T> *s:searchable->getAllPossibleStates(n)) {
-                    if (!isExist(open, s->getState()) && closed.count(s) != 0) {
+                    if (!isExist(open, s->getState()) && InClosed(s, closed) {
                         //maybe &
                         s->setCameFrom(n);
                         open.push(s);
@@ -70,14 +74,27 @@ public:
             //n is the goal state
             else {
                 while (!n.Equal(searchable->getInitialNode())) {
-                    path.push_back(n.getDad().getState());
-                    n = n.getCameFrom();
+                    path+=n.getDad()->getState();
+                    n = n.getDad();
                 }
-                std::reverse(path.begin(),path.end());
+               // std::reverse(path.begin(),path.end());
                 return path;
             }
         }
         return path;
+    }
+
+    bool InClosed(State<T> *state, vector<State<T> *> statesClosed) {
+        for (State<T> *s : statesClosed) {
+            if (state->equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int getNumberOfNodesEvaluated() {
+        return 5;
     }
 };
 

@@ -8,7 +8,7 @@
 #include "Point.h"
 #include "Searchable.h"
 
-class Matrix : public Searchable<Point> {
+class Matrix : public Searchable<class Point> {
     //State<Point>* InitialState;
     //vector<State<Point>*> vector1;
 public:
@@ -22,6 +22,9 @@ public:
 
     void setInitialState(State<Point>* point) {
         this->initialState=point;
+    }
+    State<Point>* getGoalState(){
+        return this->goalState;
     }
 
     vector<State<Point>*> getAllPossibleStates(State<Point>* s);

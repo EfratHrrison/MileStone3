@@ -3,18 +3,18 @@
 //
 #include "FileCachManager.h"
 
-template <class P,class S>
-bool FileCacheManager<P,S>::haveSolution(P problem) {
+
+bool FileCacheManager::haveSolution(string problem) {
     return this->solutionsMap.find(problem) != this->solutionsMap.end();
 }
 
-template <class P,class S>
-S FileCacheManager<P,S>::getSolution(P problem){
+
+string FileCacheManager::getSolution(string problem){
     return this->solutionsMap.find(problem)->second;
 }
 
-template <class P,class S>
-void FileCacheManager<P,S>::loadFile() {
+
+void FileCacheManager::loadFile() {
     string line;
     string solution;
     string problem;
@@ -33,8 +33,8 @@ void FileCacheManager<P,S>::loadFile() {
     FileCacheM.close();
 }
 
-template <class P,class S>
-void FileCacheManager<P,S>::addSolution(P problem, S solution) {
+
+void FileCacheManager::addSolution(string problem, string solution) {
     FileCacheM.open ("solutions.txt", ofstream::out | ostream::app);
     if(!FileCacheM){
         throw "failed opening file";
@@ -44,8 +44,8 @@ void FileCacheManager<P,S>::addSolution(P problem, S solution) {
     //this->solutionsMap.insert(pair<string,string>(problem,solution));
 }
 
-template <class P,class S>
-void FileCacheManager<P,S>::updateSolutions(P prob, S solution) {
+
+void FileCacheManager::updateSolutions(string prob, string solution) {
 
     this->solutionsMap.insert(pair<string, string>(prob, solution));
 }

@@ -11,19 +11,18 @@
 #include <map>
 #include <string>
 
-template <class P, class S>
-//hiiii
-class FileCacheManager:public CacheManager<P,S> {
+
+class FileCacheManager:public CacheManager {
 fstream FileCacheM;
 public:
     FileCacheManager(){
         loadFile();
     }
     void loadFile();
-    virtual S getSolution(P problem);
-    virtual bool haveSolution(P problem);
-    virtual void addSolution(P problem, S solution);
-    virtual void updateSolutions(P prob, S solution);
+    virtual string getSolution(string problem);
+    virtual bool haveSolution(string problem);
+    virtual void addSolution(string problem, string solution);
+    virtual void updateSolutions(string prob, string solution);
 };
 
 #endif //MILESTONE2_FILECACHMANAGER_H
