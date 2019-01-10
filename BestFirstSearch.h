@@ -17,7 +17,6 @@ class BestFirstSearch: public Searcher<T> {
         }
     };
 public:
-    // אולי להפוך שיקבל state t
     bool isExist( priority_queue<State<T> *, vector<State<T> *>, Comp> open, State<T> *state) {
         while (!open.empty()) {
             if (state->Equal(open.top())) {
@@ -40,7 +39,9 @@ public:
     string search(Searchable<T> *searchable) override {
         priority_queue<State<T> *, vector<State<T> *>, Comp> open;
         vector<State<T>*> closed;
+        vector<State<T>*> totalPoints;
         string path="";
+        double tempCost=0;
         double value;
         open.push(searchable->getInitialState());
         while (!open.empty()) {
@@ -54,14 +55,19 @@ public:
             if (!n->Equal(searchable->getGoalState())) {
                 vector<State<T> *> neighbors = searchable->getAllPossibleStates(n);
                 for (State<T> *neighbor : neighbors) {
-                    if (!isExist(open, neighbor) && InClosed(neighbor, closed)) {
-                        //maybe &
+                    if (!isExist(open, neighbor) && !InClosed(neighbor, closed)) {
                         neighbor->setCameFrom(n);
+                        tempCost=neighbor->getCost();
+                        neighbor->setCost(neighbor->getCost()+neighbor->getDad()->getCost());
                         open.push(neighbor);
                     }
-                    else if (neighbor->getCost() > neighbor->getCost() - neighbor->getDad()->getCost() + n->getCost()) {
+                    else if (neighbor->getDad()==NULL) {
+                        continue;
+                    }
+                    else if (neighbor->getCost() > tempCost + neighbor->getDad()->getCost() ) {
                         if (!isExist(open,neighbor)) {
                             open.push(neighbor);
+                            closed.erase(std::remove(closed.begin(), closed.end(), neighbor), closed.end());
                         }
                         else {
                             neighbor->setCameFrom(n);
@@ -71,13 +77,14 @@ public:
                     }
                 }
             }
-                //n is the goal state
+            //n is the goal state
             else {
-                while (!n->Equal(searchable->getInitialState())) {
-                    path+=to_string((int) n->getCost()) + "," + to_string(n->getHowManyNodes());
+                while (n != NULL) {
+                    path+=to_string((int) n->getCost())+" ";
+                    totalPoints.push_back(n);
                     n = n->getDad();
                 }
-                // std::reverse(path.begin(),path.end());
+                std::reverse(totalPoints.begin(),totalPoints.end());
                 return path;
             }
         }
