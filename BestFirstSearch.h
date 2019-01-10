@@ -27,6 +27,7 @@ public:
         }
         return false;
     }
+
     priority_queue<State<T> *, vector<State<T> *>, Comp> updateQueueOpen(priority_queue<State<T> *, vector<State<T> *>, Comp> open) {
         priority_queue<State<T> *, vector<State<T> *>, Comp> temp;
         while (!open.empty()) {
@@ -81,17 +82,20 @@ public:
             }
             //n is the goal state
             else {
+                int counter=0;
                 bool first = true;
                 while (n != NULL) {
-                    if (first){
-                        n->totalCost= n->getCost();
-                        std::cout<< n->totalCost<<endl;
+                    if (first) {
+                        searchable->setAllCost(n->getCost());
+                        std::cout<< searchable->getAllCOst()<<endl;
                         first=false;
                     }
+                    counter++;
                     path+=to_string((int) n->getCost())+" ";
                     totalPoints.push_back(n);
                     n = n->getDad();
                 }
+                cout << counter<<endl;
                 std::reverse(totalPoints.begin(),totalPoints.end());
                 finalPath= searchable->getPathSolution(totalPoints);
                 return finalPath;

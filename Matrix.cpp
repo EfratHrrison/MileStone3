@@ -49,3 +49,12 @@ string Matrix::getPathSolution(vector<State<Point>*> pathPoints){
     finalPath+="}";
     return finalPath;
 }
+
+double Matrix::getAllCOst(){
+    return this->allCost;
+}
+
+void Matrix::setAllCost(double number){
+     this->allCost= number;
+}
+

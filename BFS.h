@@ -1,48 +1,55 @@
-//
-// Created by efrat on 06/01/19.
-//
-
-#ifndef MILESTONE2_BFS_H
-#define MILESTONE2_BFS_H
-// Program to print BFS traversal from a given
-// source vertex. BFS(int s) traverses vertices
-// reachable from s.
-#include<iostream>
-#include <list>
-#include "vector"
-using namespace std;
-
-#include "Searchable.h"
 #include "Searcher.h"
-#include "State.h"
-// This class represents a directed graph using
-// adjacency list representation
-template <class T>
-class BFS: public Searcher<T> {
-    string search(Searchable<T> searchable) override {
-        list<State<T>> openList = searchable.getInitialState();
-        searchable.setCurrVisited();
-        vector<State<T>> trace;
-        while (openList.size() > 0) {
-            State<T> n = openList.front();
-            trace.push_back(n);
-            openList.pop_front();
-            if (n.equals(searchable.getGoalState())) {
-                //TODO
-                return "";
+#include <algorithm>
+#include <list>
+#include <queue>
+#define NO_PATH "-1";
+template<class T>
+class BFS : public Searcher<T> {
+    int counter=0;
+public:
+    string search(Searchable<T> *searchable) {
+        vector<State<T> *> visit;
+        string finalPath="";
+        queue<State<T>*> qu;
+        vector<State<T> *> neighbors;
+        State<T> *current;
+        vector<State<T>*> totalPoints;
+        qu.push(searchable->getInitialState());
+        visit.push_back(searchable->getInitialState());
+        while (!qu.empty()) {
+            current = qu.front();
+            if(current->Equal(searchable->getGoalState())){
+                while (current != NULL) {
+                    counter++;
+                    totalPoints.push_back(current);
+                    current = current->getDad();
+                }
+                std::reverse(totalPoints.begin(),totalPoints.end());
+                finalPath= searchable->getPathSolution(totalPoints);
+                return finalPath;
             }
-            list<State<T>> succerssors = searchable.getAllPossibleStates(n);
-            for (State<T> state : succerssors) {
-                bool visited = state.getVisited();
-                if (!visited) {
-                    state.setVisited();
-                    openList.push_back(state);
+            neighbors = searchable->getAllPossibleStates(current);
+            qu.pop();
+            for (State<T> *neighbor : neighbors) {
+                if (!wasVisited(visit,neighbor)) {
+                    neighbor->setCameFrom(current);
+                    visit.push_back(neighbor);
+                    qu.push(neighbor);
                 }
             }
         }
-        return nullptr;
+        return NO_PATH;
+    }
+
+    bool wasVisited(vector<State<T> *> visited,State<T> *current ){
+        for (auto state:visited) {
+            if (current->Equal(state)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    int getNumberOfNodesEvaluated() {
+        return counter;
     }
 };
-
-
-#endif //MILESTONE2_BFS_H

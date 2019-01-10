@@ -8,6 +8,7 @@
 #include <cstring>
 #include "string"
 #include "Matrix.h"
+
 void MyClientHandler::handleClient(int clientSock) {
     string problem="";
     string solution="";
@@ -39,12 +40,14 @@ void MyClientHandler::handleClient(int clientSock) {
          countMat=atoi(buffer);
 
          for(int p=0 ; p<countMat;p++) {
+             bzero(buffer, 1000);
              n = read(clientSock, buffer, 1000);
              if (n < 0) {
                  perror("ERROR reading from socket");
                  exit(1);
              }
              rowMat=atoi(buffer);
+             bzero(buffer, 1000);
              n = read(clientSock, buffer, 1000);
              if (n < 0) {
                  perror("ERROR reading from socket");
@@ -57,6 +60,7 @@ void MyClientHandler::handleClient(int clientSock) {
              x = std::stoi(vector1[0]);
              y = std::stoi(vector1[1]);
              Point initialP(x,y);
+             bzero(buffer, 1000);
              n = read(clientSock, buffer, 1000);
              if (n < 0) {
                  perror("ERROR reading from socket");
@@ -70,6 +74,7 @@ void MyClientHandler::handleClient(int clientSock) {
              y = std::stoi(vector1[1]);
              Point goalP(x,y);
              for(int i=0 ; i< rowMat ; i++) {
+                 bzero(buffer, 1000);
                  n = read(clientSock, buffer, 1000);
                  s = buffer;
                  problem+=buffer;
@@ -125,5 +130,6 @@ vector<string> MyClientHandler::explode(string& s, const char& c) {
             buff="";
         }
     }
+    v.push_back(buff);
     return v;
 }

@@ -14,19 +14,25 @@ protected:
 vector<State<T>*> searchable;
 State<T>* initialState;
 State<T>* goalState;
+double allCost;
 public:
-    Searchable(vector<State<T>*> search, State<T>* initial, State<T>* goal){
+    Searchable(vector<State<T>*> search, State<T>* initial, State<T>* goal) {
         this->searchable=search;
         this->initialState=initial;
         this->goalState=goal;
+        this->allCost=0;
     }
     virtual State<T>* getInitialState() = 0;
 
-    virtual State<T>* getGoalState()=0;
+    virtual State<T>* getGoalState() = 0;
 
-    virtual vector<State<T>*> getAllPossibleStates(State<T>* s)=0;
+    virtual vector<State<T>*> getAllPossibleStates(State<T>* s) = 0;
 
-    virtual string getPathSolution(vector<State<T>*> s)=0;
+    virtual string getPathSolution(vector<State<T>*> s) = 0;
+
+    virtual void setAllCost(double number) = 0;
+
+    virtual double getAllCOst() = 0;
 };
 
 #endif //MILESTONE3_SEARCHABLE_H
