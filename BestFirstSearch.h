@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "Searcher.h"
 #include <queue>
+#include "iostream"
 #include <unordered_set>
 template <class T>
 class BestFirstSearch: public Searcher<T> {
@@ -41,6 +42,7 @@ public:
         vector<State<T>*> closed;
         vector<State<T>*> totalPoints;
         string path="";
+        string finalPath="";
         double tempCost=0;
         double value;
         open.push(searchable->getInitialState());
@@ -79,13 +81,20 @@ public:
             }
             //n is the goal state
             else {
+                bool first = true;
                 while (n != NULL) {
+                    if (first){
+                        n->totalCost= n->getCost();
+                        std::cout<< n->totalCost<<endl;
+                        first=false;
+                    }
                     path+=to_string((int) n->getCost())+" ";
                     totalPoints.push_back(n);
                     n = n->getDad();
                 }
                 std::reverse(totalPoints.begin(),totalPoints.end());
-                return path;
+                finalPath= searchable->getPathSolution(totalPoints);
+                return finalPath;
             }
         }
         return path;

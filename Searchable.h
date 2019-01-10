@@ -4,6 +4,7 @@
 #ifndef MILESTONE3_SEARCHABLE_H
 #define MILESTONE3_SEARCHABLE_H
 
+#include "string"
 #include "State.h"
 #include <vector>
 using namespace std;
@@ -24,6 +25,8 @@ public:
     virtual State<T>* getGoalState()=0;
 
     virtual vector<State<T>*> getAllPossibleStates(State<T>* s)=0;
+
+    virtual string getPathSolution(vector<State<T>*> s)=0;
 };
 
 #endif //MILESTONE3_SEARCHABLE_H

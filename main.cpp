@@ -20,7 +20,7 @@ int main() {
     searchable.push_back(new State<Point>(Point(1, 0), 1));
     searchable.push_back(new State<Point>(Point(1, 1), 7));
     searchable.push_back(new State<Point>(Point(1, 2), 5));
-    searchable.push_back(new State<Point>(Point(2, 0), 100));
+    searchable.push_back(new State<Point>(Point(2, 0), 1));
     searchable.push_back(new State<Point>(Point(2, 1), 4));
     searchable.push_back(goal);
 

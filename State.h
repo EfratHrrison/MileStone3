@@ -13,12 +13,15 @@ private:
     State<T>* cameFrom;
     double trailCost;
     bool visited;
+
     int howManyNodes;
 public:
+    double totalCost;
     State(T state, double cost) : state(state), cost(cost) {
         this->cameFrom = nullptr;
         this->trailCost = 0;
         howManyNodes=0;
+        totalCost=0;
     }
     bool Equal(State *state1) {
         return (this->state==state1->state);
