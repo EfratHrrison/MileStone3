@@ -18,67 +18,67 @@ class BestFirstSearch: public Searcher<T> {
     };
 public:
     // אולי להפוך שיקבל state t
-    bool isExist(priority_queue <State<T>> open, T node) {
-       while(!open.empty()) {
-           State<T> *temp = open.top;
-           if (temp->Equal(node)) {
-               return true;
-           }
-           open.pop();
-       }
-       return false;
+    bool isExist( priority_queue<State<T> *, vector<State<T> *>, Comp> open, State<T> *state) {
+        while(!open.empty()) {
+            State<T> *temp = open.top;
+            if (temp->Equal(state)) {
+                return true;
+            }
+            open.pop();
+        }
+        return false;
     }
-    priority_queue<State<T>*> updateQueueOpen(priority_queue<State<T>*> &queueOpen) {
+    priority_queue<State<T>> updateQueueOpen(priority_queue<State<T> *, vector<State<T> *>, Comp> open) {
         priority_queue<State<T>*> temp;
-        while (!queueOpen.empty()) {
-            State<T>* node = queueOpen.top();
+        while (!open.empty()) {
+            State<T>* node = open.top();
             temp.push(node);
-            queueOpen.pop();
+            open.pop();
         }
         return temp;
     }
 
     string search(Searchable<T> *searchable) override {
-        priority_queue<State<T>*, vector<State<T>*>, Comp> open;
-        unordered_set<State<T>> closed;
+        priority_queue<State<T> *, vector<State<T> *>, Comp> open;
+        vector<State<T>*> closed;
         string path="";
         double value;
         open.push(searchable->getInitialState());
         while (!open.empty()) {
             State<T> *n = open.top();
-            closed.insert(n);
+            closed.push_back(n);
             if ((n->Equal(searchable->getInitialState())) && n->getCost() == -1) {
                 path = "-1";
                 return path;
             }
             open.pop();
-            if (!n.Equal(searchable->getGoalNode())) {
-                for (State<T> *s:searchable->getAllPossibleStates(n)) {
-                    if (!isExist(open, s->getState()) && closed.find(s) != searchable->getAllPossibleStates(n).end()) {
+            if (!n->Equal(searchable->getGoalState())) {
+                vector<State<T> *> neighbors = searchable->getAllPossibleStates(n);
+                for (State<T> *neighbor : neighbors) {
+                    if (!isExist(open, neighbor) && InClosed(neighbor, closed)) {
                         //maybe &
-                        s->setCameFrom(n);
-                        open.push(s);
+                        neighbor->setCameFrom(n);
+                        open.push(neighbor);
                     }
-                    else if (s->getCost() > s->getCost() - s->getDad().getCost() + n->getCost()) {
-                        if (!isExist(s)) {
-                            open.push(s);
+                    else if (neighbor->getCost() > neighbor->getCost() - neighbor->getDad().getCost() + n->getCost()) {
+                        if (!isExist(open,neighbor)) {
+                            open.push(neighbor);
                         }
                         else {
-                            s->setCameFrom(n);
-                            s->setCost(s->getCost() - s->getDad().getCost() + n->getCost());
+                            neighbor->setCameFrom(n);
+                            neighbor->setCost(neighbor->getCost() - neighbor->getDad().getCost() + n->getCost());
                             open = updateQueueOpen(open);
                         }
                     }
                 }
-
             }
-            //n is the goal state
+                //n is the goal state
             else {
-                while (!n.Equal(searchable->getInitialNode())) {
-                    path+=n.getDad()->getState();
-                    n = n.getDad();
+                while (!n->Equal(searchable->getInitialNode())) {
+                    path+=n->getDad()->getState();
+                    n = n->getDad();
                 }
-               // std::reverse(path.begin(),path.end());
+                // std::reverse(path.begin(),path.end());
                 return path;
             }
         }
