@@ -60,13 +60,13 @@ public:
                         neighbor->setCameFrom(n);
                         open.push(neighbor);
                     }
-                    else if (neighbor->getCost() > neighbor->getCost() - neighbor->getDad().getCost() + n->getCost()) {
+                    else if (neighbor->getCost() > neighbor->getCost() - neighbor->getDad()->getCost() + n->getCost()) {
                         if (!isExist(open,neighbor)) {
                             open.push(neighbor);
                         }
                         else {
                             neighbor->setCameFrom(n);
-                            neighbor->setCost(neighbor->getCost() - neighbor->getDad().getCost() + n->getCost());
+                            neighbor->setCost(neighbor->getCost() - neighbor->getDad()->getCost() + n->getCost());
                             open = updateQueueOpen(open);
                         }
                     }
@@ -74,10 +74,10 @@ public:
             }
                 //n is the goal state
             else {
-                while (!n->Equal(searchable->getInitialNode())) {
-                    path+=n->getDad()->getState();
-                    n = n->getDad();
-                }
+//                while (!n->Equal(searchable->getInitialNode())) {
+//                    //path+=n->getDad()->getState();
+//                    //n = n->getDad();
+//                }
                 // std::reverse(path.begin(),path.end());
                 return path;
             }
@@ -87,7 +87,7 @@ public:
 
     bool InClosed(State<T> *state, vector<State<T> *> statesClosed) {
         for (State<T> *s : statesClosed) {
-            if (state->equals(s)) {
+            if (state->Equal(s)) {
                 return true;
             }
         }

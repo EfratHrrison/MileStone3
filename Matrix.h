@@ -7,6 +7,7 @@
 
 #include "Point.h"
 #include "Searchable.h"
+#include <string>
 
 class Matrix : public Searchable<class Point> {
     //State<Point>* InitialState;
@@ -29,6 +30,7 @@ public:
 
     vector<State<Point>*> getAllPossibleStates(State<Point>* s);
 
+    string getPathSolution(vector<State<Point>*> pathPoints);
 
 
 };

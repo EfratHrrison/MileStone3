@@ -20,3 +20,27 @@ vector<State<Point>*> Matrix::getAllPossibleStates(State<Point>* s){
     }
     return neighbors;
 }
+
+string Matrix::getPathSolution(vector<State<Point>*> pathPoints){
+    State<Point>* s;
+    string finalPath="{";
+    for(int i=0; i<pathPoints.size(); i++) {
+        s = pathPoints[i];
+        int X = s->getState().getX();
+        int Y = s->getState().getY();
+        if (pathPoints[i+1]->getState().getX()==X+1){
+            finalPath+="Down, ";
+        }
+        else if(pathPoints[i+1]->getState().getX()==X-1){
+            finalPath+="Up, ";
+        }
+        else if (pathPoints[i+1]->getState().getY()==Y-1){
+            finalPath+="Right, ";
+        }
+        else if (pathPoints[i+1]->getState().getY()==Y+1){
+            finalPath+="Left, ";
+        }
+    }
+    finalPath+="}";
+    return finalPath;
+}
