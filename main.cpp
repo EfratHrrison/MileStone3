@@ -24,7 +24,6 @@ int main() {
     searchable.push_back(new State<Point>(Point(2, 1), 4));
     searchable.push_back(goal);
 
-
     Searchable<Point> *m = new Matrix(searchable, initial, goal);
     BestFirstSearch<Point> *b = new BestFirstSearch<Point>;
     string x = b->search(m);

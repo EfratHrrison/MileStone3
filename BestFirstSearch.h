@@ -40,36 +40,37 @@ public:
 
     string search(Searchable<T> *searchable) override {
         priority_queue<State<T>*, vector<State<T>*>, Comp> open;
-       vector<State<T>*> closed;
+        unordered_set<State<T>> closed;
         string path="";
         double value;
         open.push(searchable->getInitialState());
         while (!open.empty()) {
-            State<T> n = open.top();
-            closed.push_back(n);
-            if ((n.Equal(searchable->getInitialState())) && n.getCost() == -1) {
+            State<T> *n = open.top();
+            closed.insert(n);
+            if ((n->Equal(searchable->getInitialState())) && n->getCost() == -1) {
                 path = "-1";
                 return path;
             }
             open.pop();
             if (!n.Equal(searchable->getGoalNode())) {
                 for (State<T> *s:searchable->getAllPossibleStates(n)) {
-                    if (!isExist(open, s->getState()) && InClosed(s, closed) {
+                    if (!isExist(open, s->getState()) && closed.find(s) != searchable->getAllPossibleStates(n).end()) {
                         //maybe &
                         s->setCameFrom(n);
                         open.push(s);
                     }
-                    else if (s->getCost() > s->getCost() - s->getDad().getCost() + n.getCost()) {
+                    else if (s->getCost() > s->getCost() - s->getDad().getCost() + n->getCost()) {
                         if (!isExist(s)) {
                             open.push(s);
                         }
                         else {
                             s->setCameFrom(n);
-                            s->setCost(s->getCost() - s->getDad().getCost() + n.getCost());
+                            s->setCost(s->getCost() - s->getDad().getCost() + n->getCost());
                             open = updateQueueOpen(open);
                         }
                     }
                 }
+
             }
             //n is the goal state
             else {
