@@ -13,10 +13,12 @@ private:
     State<T>* cameFrom;
     double trailCost;
     bool visited;
+    int howManyNodes;
 public:
     State(T state, double cost) : state(state), cost(cost) {
         this->cameFrom = nullptr;
         this->trailCost = 0;
+        howManyNodes=0;
     }
     bool Equal(State *state1) {
         return (this->state==state1->state);
@@ -51,6 +53,15 @@ public:
     double getTrailCost() {
         return this->trailCost;
     }
+
+    void setHowManyNodes(int nodes) {
+        this->howManyNodes = nodes;
+    }
+
+    int getHowManyNodes() {
+        return this->howManyNodes;
+    }
+
 
 };
 #endif //MILESTONE3_STATE_H

@@ -19,17 +19,16 @@ class BestFirstSearch: public Searcher<T> {
 public:
     // אולי להפוך שיקבל state t
     bool isExist( priority_queue<State<T> *, vector<State<T> *>, Comp> open, State<T> *state) {
-        while(!open.empty()) {
-            State<T> *temp = open.top;
-            if (temp->Equal(state)) {
+        while (!open.empty()) {
+            if (state->Equal(open.top())) {
                 return true;
             }
             open.pop();
         }
         return false;
     }
-    priority_queue<State<T>> updateQueueOpen(priority_queue<State<T> *, vector<State<T> *>, Comp> open) {
-        priority_queue<State<T>*> temp;
+    priority_queue<State<T> *, vector<State<T> *>, Comp> updateQueueOpen(priority_queue<State<T> *, vector<State<T> *>, Comp> open) {
+        priority_queue<State<T> *, vector<State<T> *>, Comp> temp;
         while (!open.empty()) {
             State<T>* node = open.top();
             temp.push(node);
@@ -60,13 +59,13 @@ public:
                         neighbor->setCameFrom(n);
                         open.push(neighbor);
                     }
-                    else if (neighbor->getCost() > neighbor->getCost() - neighbor->getDad().getCost() + n->getCost()) {
+                    else if (neighbor->getCost() > neighbor->getCost() - neighbor->getDad()->getCost() + n->getCost()) {
                         if (!isExist(open,neighbor)) {
                             open.push(neighbor);
                         }
                         else {
                             neighbor->setCameFrom(n);
-                            neighbor->setCost(neighbor->getCost() - neighbor->getDad().getCost() + n->getCost());
+                            neighbor->setCost(neighbor->getCost() - neighbor->getDad()->getCost() + n->getCost());
                             open = updateQueueOpen(open);
                         }
                     }
@@ -74,8 +73,8 @@ public:
             }
                 //n is the goal state
             else {
-                while (!n->Equal(searchable->getInitialNode())) {
-                    path+=n->getDad()->getState();
+                while (!n->Equal(searchable->getInitialState())) {
+                    path+=to_string((int) n->getCost()) + "," + to_string(n->getHowManyNodes());
                     n = n->getDad();
                 }
                 // std::reverse(path.begin(),path.end());
@@ -87,7 +86,7 @@ public:
 
     bool InClosed(State<T> *state, vector<State<T> *> statesClosed) {
         for (State<T> *s : statesClosed) {
-            if (state->equals(s)) {
+            if (state->Equal(s)) {
                 return true;
             }
         }
