@@ -25,6 +25,7 @@ public:
     void setInitialState(State<Point>* point) {
         this->initialState=point;
     }
+
     State<Point>* getGoalState(){
         return this->goalState;
     }
@@ -33,6 +34,9 @@ public:
 
     string getPathSolution(vector<State<Point>*> pathPoints);
 
+    void setAllCost(double number);
+
+    double getAllCOst();
 
 };
 

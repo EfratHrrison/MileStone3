@@ -8,7 +8,7 @@
 #include "Searcher.h"
 #include "Point.h"
 
-class GetSolution : public Solver<Searchable<Point>, string> {
+class GetSolution : public Solver<Searchable<Point>*, string> {
     Searcher<Point>* searcher;
 public:
     GetSolution(Searcher<Point>* searcher1) {
