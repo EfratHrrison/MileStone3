@@ -23,25 +23,6 @@ void MySerialServer::open(int port, ClientHandler *handler) {
         perror("ERROR opening socket");
         exit(1);
     }
-//    this->sockfd = sockfd;
-//
-//    /* Initialize socket structure */
-//    bzero((char *) &serv_addr, sizeof(serv_addr));
-//    portno = port;
-//
-//    serv_addr.sin_family = AF_INET;
-//    serv_addr.sin_addr.s_addr = INADDR_ANY;
-//    serv_addr.sin_port = htons(portno);
-//
-//    /* Now bind the host address using bind() call.*/
-//    if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-//        perror("ERROR on binding");
-//        exit(1);
-//    }
-//
-//    listenTo(this->sockfd,handler);
-//    thread thread1(listenTo, this->sockfd,handler);
-    /* Initialize socket structure */
     bzero((char *) &serv_addr, sizeof(serv_addr));
     portno = port;
 
@@ -67,6 +48,7 @@ void MySerialServer::listenTo(int sockfd, ClientHandler *handler) {
     int newsockfd, clilen;
     struct sockaddr_in cli_addr;
 
+//todo timeout
     while (true) {
         listen(sockfd, 5);
         clilen = sizeof(cli_addr);
@@ -79,7 +61,3 @@ void MySerialServer::listenTo(int sockfd, ClientHandler *handler) {
 void MySerialServer::stop() {
 
 }
-
-
-
-

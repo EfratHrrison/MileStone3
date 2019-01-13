@@ -6,7 +6,12 @@
 #define MILESTONE2_SERVER_H
 #include "ClientHandler.h"
 
-class Server {
+namespace server_side{
+    class Server;
+}
+
+
+class server_side::Server {
 public:
     virtual void open(int port, ClientHandler *handler) = 0;
 

@@ -1,6 +1,7 @@
 //
 // Created by efrat on 05/01/19.
 //
+#include <vector>
 #include "FileCachManager.h"
 
 
@@ -23,11 +24,20 @@ void FileCacheManager::loadFile() {
         throw "File Faild";
     }
     while(getline(FileCacheM,line)){
-        if (size_t found = line.find("$") != string::npos)
-        {
-            problem = line.substr(0,found);
-            solution = line.substr(found+1, string::npos);
+        string buff{""};
+        vector<string> v;
+        for(auto n:line) {
+            if(n != '$') {
+                buff += n;
+            }
+            else {
+                v.push_back(buff);
+                buff="";
+            }
         }
+        v.push_back(buff);
+        problem=v[0];
+        solution=v[1];
         this->solutionsMap.insert(pair<string,string>(problem,solution));
     }
     FileCacheM.close();
