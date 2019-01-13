@@ -32,16 +32,16 @@ string Matrix::getPathSolution(vector<State<Point>*> pathPoints){
         int yNext=next->getState().getY();
         int X = s->getState().getX();
         int Y = s->getState().getY();
-        if (xNext==X+1){
+        if ((xNext==X+1)&&(Y==yNext)){
             finalPath+="Down, ";
         }
-        else if(xNext==X-1){
+        else if((xNext==X-1)&&(Y==yNext)){
             finalPath+="Up, ";
         }
-        else if (yNext==Y-1){
+        else if ((yNext==Y-1)&&(X==xNext)){
             finalPath+="Left, ";
         }
-        else if (yNext==Y+1){
+        else if ((yNext==Y+1)&&(X==xNext)){
             finalPath+="Right, ";
         }
     }

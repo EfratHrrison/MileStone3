@@ -9,6 +9,7 @@
 #include "Point.h"
 #include "BFS.h"
 #include "DFS.h"
+#include "GetSolution.h"
 
 int main() {
 
@@ -30,4 +31,13 @@ int main() {
     DFS<Point> *b = new DFS<Point>;
     string x = b->search(m);
     cout << x << endl;
+
+
+//    MySerialServer* d = new MySerialServer();
+//    Solver<Searchable<Point>*, string>* solver = new GetSolution(new BestFirstSearch<Point>());
+//    CacheManager* cacheManager = new FileCacheManager();
+//    ClientHandler* ds = new MyClientHandler(solver, cacheManager);
+//    d->open(5400,ds);
+//    while (true) {}
+//    return 0;
 }
