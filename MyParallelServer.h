@@ -12,21 +12,17 @@
 #include "MyClientHandler.h"
 
 class MyParallelServer : public server_side::Server {
-    struct dataPass *passingData = new dataPass();
-    vector<pthread_t> threadList;
-    int port;
-    int sockfd;
-    int serverfd;
-    vector <pthread_t> threads;
+private:
+    vector<pthread_t> threads;
+    struct params {
+        ClientHandler* clientHandler;
+        int sockfd;
+    };
+
 public:
-    void open(int port, ClientHandler *cH);
-
+    void open(int port, ClientHandler *c);
     void stop();
-
-    static void* threadManager (void* data);
-
-
-
+    static void* parallelService (void* params);
 };
 
 

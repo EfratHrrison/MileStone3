@@ -17,13 +17,10 @@ void MyClientHandler::handleClient(int clientSock) {
     int clilen;
     char* chr;
     int x; int y;
-    int countMat;
     int countLines =0;
-    int rowMat;
-    bool flag=false;
     vector<string> vector1;
+    vector<string> vector2;
     vector<State<Point>*> MatrixV;
-    Matrix *matrix;
     mutex mutexFile;
 
     ssize_t n;
@@ -61,7 +58,9 @@ void MyClientHandler::handleClient(int clientSock) {
         Point goalP(x,y);
 
         int row=countLines;
-        int col=vectorBuff[0].size()-2;
+        string numOfClo=vectorBuff[0];
+        vector2= explode(numOfClo,',');
+        int col=vector2.size();
         for(int i=0 ; i< row ; i++) {
             s = vectorBuff[i];
             vector1= explode(s,',');

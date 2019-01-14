@@ -17,6 +17,8 @@ public:
     virtual bool haveSolution(string problem)=0;
     virtual void addSolution(string problem, string solution)=0;
     virtual void updateSolutions(string prob, string solution) = 0;
+    ~CacheManager(){
+    }
 };
 
 #endif //MILESTONE2_CACHEMANAGER_H

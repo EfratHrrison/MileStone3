@@ -1,9 +1,15 @@
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <cstdlib>
+#include <strings.h>
+#include <cstdio>
+#include <thread>
+#include <iostream>
 #include "MyParallelServer.h"
-#include <cstring>
 
-void MyParallelServer::open(int port, ClientHandler *handler) {
-
+void MyParallelServer::open(int port, ClientHandler *c) {
     int sockfd, portno;
+
     struct sockaddr_in serv_addr;
 
     /* First call to socket() function */
@@ -13,8 +19,7 @@ void MyParallelServer::open(int port, ClientHandler *handler) {
         perror("ERROR opening socket");
         exit(1);
     }
-    /*this->passingData->sockfd = sockfd;*/
-    this->passingData->clientHandler=handler;
+
     /* Initialize socket structure */
     bzero((char *) &serv_addr, sizeof(serv_addr));
     portno = port;
@@ -22,51 +27,61 @@ void MyParallelServer::open(int port, ClientHandler *handler) {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(portno);
-    cout<<"hi 3"<<endl;
+
     /* Now bind the host address using bind() call.*/
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         perror("ERROR on binding");
         exit(1);
     }
+    int newsockfd, clilen;
     struct sockaddr_in cli_addr;
-    int clilen, cliSock;
+    struct params* info = new params;
     listen(sockfd, SOMAXCONN);
     clilen = sizeof(cli_addr);
-
     timeval timeout;
-    timeout.tv_sec = 10000;
-    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(timeout));
-    while(true){
-        cliSock = accept(sockfd, (struct sockaddr *) &cli_addr, (socklen_t *) &clilen);
-        this->passingData->sockfd = cliSock;
-        if (cliSock < 0) {
-            if (errno == EWOULDBLOCK) {
-                cout << "Time Out!" << endl;
+    timeout.tv_sec = 1000;
+    timeout.tv_usec = 0;
+
+    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
+
+
+    while (true) {
+        /* Accept actual connection from the client */
+        newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, (socklen_t *) &clilen);
+        cout<<"sockfd: "<< newsockfd<<endl;
+
+        if (newsockfd < 0)	{
+            if (errno == EWOULDBLOCK)	{
                 stop();
-            } else {
-                perror("ERROR on accept");
-                exit(1);
+            }	else	{
+                perror("other error");
+                exit(3);
             }
         }
-        pthread_t pthread;
-        if(pthread_create(&pthread, nullptr,MyParallelServer::threadManager,passingData)!=0){
+        //setting params
+        info->sockfd = newsockfd;
+        info->clientHandler = c;
+        pthread_t thread;
+        //creating thread and sending to handle client
+        if (pthread_create(&thread, nullptr, MyParallelServer::parallelService,info) != 0){
             perror("thread failed");
         }
-        this->threads.push_back(pthread);
+        threads.push_back(thread);
+
     }
-
 }
 
-void *MyParallelServer::threadManager(void *data) {
-    struct dataPass *passingData = (struct dataPass *) data;
-    passingData->clientHandler->handleClient(passingData->sockfd);
-
+void* MyParallelServer::parallelService(void* newParams) {
+    struct params *info = (struct params*)newParams;
+    int sockfd = info->sockfd;
+    info->clientHandler->handleClient(sockfd);
 }
 
+/*
+ * making all the clients wait till all are done
+ */
 void MyParallelServer::stop() {
-    for(int i=0;i<this->threads.size();++i){
-        pthread_join(this->threads[i],NULL);
-        //delete(this->threads[i]);
+    for (auto thread: this->threads) {
+        pthread_join(thread, NULL);
     }
-
 }

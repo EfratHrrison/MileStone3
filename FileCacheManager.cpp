@@ -57,7 +57,7 @@ void FileCacheManager::addSolution(string problem, string solution) {
     if(!FileCacheM){
         throw "failed opening file";
     }
-    FileCacheM << problem << "$" <<solution << endl;
+    FileCacheM << problem << "$" <<solution << + "\n";
     FileCacheM.close();
     //this->solutionsMap.insert(pair<string,string>(problem,solution));
 }
