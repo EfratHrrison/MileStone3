@@ -15,6 +15,7 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
+#define NO_PATH "-1";
 
 using namespace std;
 
@@ -36,6 +37,12 @@ public:
         pathCost =0;
     }
 
+    /**
+    * this function checks if a state is already in our queue
+    * @param open - our priority_queue
+    * @param state - the state we a looking for
+    * @return true if the state in the priority_queue false otherwise
+    */
     bool isExist( priority_queue<State<T> *, vector<State<T> *>, Cmp> open, State<T> *state) {
         while (!open.empty()) {
             if (state->Equal(open.top())) {
@@ -45,6 +52,11 @@ public:
         }
         return false;
     }
+    /**
+    * this func updates the priority_queue when we want to update the cost for one of the states
+    * @param queueOpen
+    * @return the new priority_queue after we apdated it
+    */
     priority_queue<State<T>*,vector<State<T>*>,Cmp> updateQueue(priority_queue<State<T>*, vector<State<T>*>, Cmp> &queueOpen) {
         priority_queue<State<T>*,vector<State<T>*>,Cmp> temp;
         while (!queueOpen.empty()) {
@@ -66,6 +78,7 @@ public:
             State<T>* n = openList.top();
             openList.pop();
             closed.insert(n);
+            //If n is the goal state
             if (n->Equal(searchable->getGoalState())) {
                 path.push_back(n);
                 while (!n->Equal(searchable->getInitialState())) {
@@ -81,6 +94,7 @@ public:
                 finalPath= searchable->getPathSolution(back);
                 return finalPath;
             }
+            //Create n's successors
             vector<State<T> *> neighbors = searchable->getAllPossibleStates(n);
             for (State<T>* adj : neighbors) { ;
                 bool exist = isExist(openList, adj);
@@ -92,17 +106,25 @@ public:
                     bool inOpen = isExist(openList, adj);
                     adj->setDistance(n->getDistance() + adj->getCost());
                     adj->setCameFrom(n);
+                    //Otherwise, adjust its priority in OPEN done
                     openList = updateQueue(openList);
                 }
             }
         }
-        return finalPath;
+        //dead end -  which means we run into "walls" so there is no path
+        return NO_PATH;
     }
-
+    /**
+        * this function returns the number of nodes we evaluated in our algotithm
+        * @return num of nodes
+        */
     int getNumberOfNodesEvaluated() override {
         return evaluated;
     }
-
+    /**
+        * this func returns the cost of the path we made
+        * @return the cost of our path
+        */
     double getPathCost() override {
         return pathCost;
     }
