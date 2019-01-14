@@ -9,16 +9,34 @@
 #include <queue>
 #include "iostream"
 #include <unordered_set>
-template <class T>
-class BestFirstSearch: public Searcher<T> {
-    class Comp {
+#include "Searcher.h"
+#include "list"
+#include <unordered_set>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+template<class T>
+class BestFirstSearch : public Searcher<T> {
+private:
+    int evaluated;
+    double pathCost;
+    class Cmp {
     public:
         bool operator()(State<T>* left, State<T>* right) {
-            return (left->getCost()) > (right->getCost());
+            return (left->getDistance()) > (right->getDistance());
         }
     };
+
 public:
-    bool isExist( priority_queue<State<T> *, vector<State<T> *>, Comp> open, State<T> *state) {
+    BestFirstSearch() {
+        evaluated = 0;
+        pathCost =0;
+    }
+
+    bool isExist( priority_queue<State<T> *, vector<State<T> *>, Cmp> open, State<T> *state) {
         while (!open.empty()) {
             if (state->Equal(open.top())) {
                 return true;
@@ -27,95 +45,68 @@ public:
         }
         return false;
     }
-
-    priority_queue<State<T> *, vector<State<T> *>, Comp> updateQueueOpen(priority_queue<State<T> *, vector<State<T> *>, Comp> open) {
-        priority_queue<State<T> *, vector<State<T> *>, Comp> temp;
-        while (!open.empty()) {
-            State<T>* node = open.top();
+    priority_queue<State<T>*,vector<State<T>*>,Cmp> updateQueue(priority_queue<State<T>*, vector<State<T>*>, Cmp> &queueOpen) {
+        priority_queue<State<T>*,vector<State<T>*>,Cmp> temp;
+        while (!queueOpen.empty()) {
+            State<T>* node = queueOpen.top();
             temp.push(node);
-            open.pop();
+            queueOpen.pop();
         }
         return temp;
     }
 
-    string search(Searchable<T> *searchable) override {
-        priority_queue<State<T> *, vector<State<T> *>, Comp> open;
-        vector<State<T>*> closed;
-        vector<State<T>*> totalPoints;
-        string path="";
+    string search(Searchable<T>* searchable) override {
+        priority_queue<State<T>*, vector<State<T>*>, Cmp> openList;
+        openList.push(searchable->getInitialState());
+        unordered_set<State<T>*> closed;
         string finalPath="";
-        double tempCost=0;
-        double value;
-        open.push(searchable->getInitialState());
-        while (!open.empty()) {
-            State<T> *n = open.top();
-            closed.push_back(n);
-            if ((n->Equal(searchable->getInitialState())) && n->getCost() == -1) {
-                path = "-1";
-                return path;
-            }
-            open.pop();
-            if (!n->Equal(searchable->getGoalState())) {
-                vector<State<T> *> neighbors = searchable->getAllPossibleStates(n);
-                for (State<T> *neighbor : neighbors) {
-                    if (!isExist(open, neighbor) && !InClosed(neighbor, closed)) {
-                        neighbor->setCameFrom(n);
-                        tempCost=neighbor->getCost();
-                        neighbor->setCost(neighbor->getCost()+neighbor->getDad()->getCost());
-                        open.push(neighbor);
-                    }
-                    else if (neighbor->getDad()==NULL) {
-                        continue;
-                    }
-                    else if (neighbor->getCost() > tempCost + neighbor->getDad()->getCost() ) {
-                        if (!isExist(open,neighbor)) {
-                            open.push(neighbor);
-                            closed.erase(std::remove(closed.begin(), closed.end(), neighbor), closed.end());
-                        }
-                        else {
-                            neighbor->setCameFrom(n);
-                            neighbor->setCost(neighbor->getCost() - neighbor->getDad()->getCost() + n->getCost());
-                            open = updateQueueOpen(open);
-                        }
-                    }
-                }
-            }
-            //n is the goal state
-            else {
-                int counter=0;
-                bool first = true;
-                while (n != NULL) {
-                    if (first) {
-                        searchable->setAllCost(n->getCost());
-                        std::cout<< searchable->getAllCOst()<<endl;
-                        first=false;
-                    }
-                    counter++;
-                    path+=to_string((int) n->getCost())+" ";
-                    totalPoints.push_back(n);
+        vector<State<T>*> path;
+        while (!openList.empty()) {
+            evaluated++;
+            State<T>* n = openList.top();
+            openList.pop();
+            closed.insert(n);
+            if (n->Equal(searchable->getGoalState())) {
+                path.push_back(n);
+                while (!n->Equal(searchable->getInitialState())) {
+                    path.push_back(n->getDad());
+                    pathCost += n->getCost();
                     n = n->getDad();
                 }
-                cout << counter<<endl;
-                std::reverse(totalPoints.begin(),totalPoints.end());
-                finalPath= searchable->getPathSolution(totalPoints);
+                pathCost += n->getCost();
+                vector<State<T>*> back;
+                for (int i = path.size() - 1; i >= 0 ; i--) {
+                    back.push_back(path.at(i));
+                }
+                finalPath= searchable->getPathSolution(back);
                 return finalPath;
             }
-        }
-        return path;
-    }
-
-    bool InClosed(State<T> *state, vector<State<T> *> statesClosed) {
-        for (State<T> *s : statesClosed) {
-            if (state->Equal(s)) {
-                return true;
+            vector<State<T> *> neighbors = searchable->getAllPossibleStates(n);
+            for (State<T>* adj : neighbors) { ;
+                bool exist = isExist(openList, adj);
+                if (!exist && closed.count(adj) != 1) {
+                    adj->setCameFrom(n);
+                    adj->setDistance(n->getDistance());
+                    openList.push(adj);
+                } else if (adj->getDistance() > n->getDistance() + adj->getCost()) {
+                    bool inOpen = isExist(openList, adj);
+                    adj->setDistance(n->getDistance() + adj->getCost());
+                    adj->setCameFrom(n);
+                    openList = updateQueue(openList);
+                }
             }
         }
-        return false;
+        return finalPath;
     }
 
-    int getNumberOfNodesEvaluated() {
-        return 5;
+    int getNumberOfNodesEvaluated() override {
+        return evaluated;
     }
+
+    double getPathCost() override {
+        return pathCost;
+    }
+
 };
 
 #endif //MILESTONE3_BESTFIRSTSEARCH_H

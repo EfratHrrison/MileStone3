@@ -17,6 +17,8 @@ public:
     virtual string search (Searchable<T>* searchable) = 0;
 
     virtual int getNumberOfNodesEvaluated() = 0;
+
+    virtual double getPathCost() = 0;
 };
 
 

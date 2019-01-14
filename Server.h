@@ -12,6 +12,11 @@ namespace server_side{
 
 
 class server_side::Server {
+protected:
+    struct  dataPass{
+        int sockfd;
+        ClientHandler *clientHandler;
+    };
 public:
     virtual void open(int port, ClientHandler *handler) = 0;
 

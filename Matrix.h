@@ -18,6 +18,7 @@ public:
     : Searchable(search, initial,goal){
     }
 
+
     State<Point>* getInitialState() {
         return this->initialState;
     }

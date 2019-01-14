@@ -11,17 +11,19 @@ private:
     T state;
     double cost;
     State<T>* cameFrom;
+    double distance;
     double trailCost;
     bool visited;
+    double heur;
 
-    int howManyNodes;
 public:
     double totalCost;
     State(T state, double cost) : state(state), cost(cost) {
         this->cameFrom = nullptr;
+        this->distance=cost;
         this->trailCost = 0;
-        howManyNodes=0;
         totalCost=0;
+        this->heur=0;
     }
     bool Equal(State *state1) {
         return (this->state==state1->state);
@@ -29,6 +31,15 @@ public:
     void setCameFrom(State<T>* dad) {
         this->cameFrom = dad;
     }
+
+    void setDistance(double d) {
+        this->distance += d;
+    }
+
+    double getDistance() {
+        return distance;
+    }
+
     void setVisited() {
         this->visited = true;
     }
@@ -49,21 +60,15 @@ public:
         return state;
     }
 
-    void setCost(double d) {
-        this->cost = d;
+    double getHeur() {
+        return heur;
     }
 
-    double getTrailCost() {
-        return this->trailCost;
+    void setHeur(double heur) {
+        this->heur = heur;
     }
 
-    void setHowManyNodes(int nodes) {
-        this->howManyNodes = nodes;
-    }
 
-    int getHowManyNodes() {
-        return this->howManyNodes;
-    }
 
 
 };

@@ -6,6 +6,7 @@
 template<class T>
 class BFS : public Searcher<T> {
     int counter=0;
+    int cost=0;
 public:
     string search(Searchable<T> *searchable) {
         vector<State<T> *> visit;
@@ -21,12 +22,13 @@ public:
             current = qu.front();
             if(current->Equal(searchable->getGoalState())){
                 while (current != NULL) {
-                    //counter++;
+                    cost+=current->getCost();
                     totalPoints.push_back(current);
                     current = current->getDad();
                 }
                 std::reverse(totalPoints.begin(),totalPoints.end());
                 finalPath= searchable->getPathSolution(totalPoints);
+                cout << cost << endl;
                 return finalPath;
             }
             neighbors = searchable->getAllPossibleStates(current);

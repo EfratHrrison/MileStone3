@@ -22,6 +22,7 @@ public:
         string finalPath="";
 
         qu.push(searchable->getInitialState());
+        counter++;
 
         while (!qu.empty()) {
             current = qu.top();
@@ -34,7 +35,7 @@ public:
             if(current->Equal(searchable->getGoalState())){
 
                 while (current != NULL) {
-                    counter++;
+
                     totalPoints.push_back(current);
                     current = current->getDad();
                 }
@@ -47,6 +48,7 @@ public:
                 if (!wasVisited(visited,neighbor)) {
                     neighbor->setCameFrom(current);
                     qu.push(neighbor);
+                    counter++;
                 }
             }
         }

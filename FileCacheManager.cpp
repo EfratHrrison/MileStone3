@@ -4,12 +4,20 @@
 #include <vector>
 #include "FileCachManager.h"
 
-
+/**
+ * this function checks if we already have the problem
+ * in our file
+ * @param problem - the problem we are looking for
+ * @return true if we have it, false otherwise
+ */
 bool FileCacheManager::haveSolution(string problem) {
     return this->solutionsMap.find(problem) != this->solutionsMap.end();
 }
-
-
+/**
+ * this function returns the solution from the file
+ * @param problem
+ * @return the solution
+ */
 string FileCacheManager::getSolution(string problem){
     return this->solutionsMap.find(problem)->second;
 }
@@ -19,7 +27,7 @@ void FileCacheManager::loadFile() {
     string line;
     string solution;
     string problem;
-    FileCacheM.open("solutions.txt", ifstream::in | istream::app);
+    FileCacheM.open("pro&sol.txt", ifstream::in | istream::app);
     if(!FileCacheM){
         throw "File Faild";
     }
@@ -45,7 +53,7 @@ void FileCacheManager::loadFile() {
 
 
 void FileCacheManager::addSolution(string problem, string solution) {
-    FileCacheM.open ("solutions.txt", ofstream::out | ostream::app);
+    FileCacheM.open ("pro&sol.txt", ofstream::out | ostream::app);
     if(!FileCacheM){
         throw "failed opening file";
     }
