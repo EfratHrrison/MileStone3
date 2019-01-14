@@ -12,6 +12,7 @@ using namespace std;
 
 template <class T>
 class DFS : Searcher<T> {
+    int cost = 0;
     int counter=0;
 public:
     string search(Searchable<T> *searchable) {
@@ -36,7 +37,7 @@ public:
             if(current->Equal(searchable->getGoalState())){
 
                 while (current != NULL) {
-
+                    cost+=current->getCost();
                     totalPoints.push_back(current);
                     current = current->getDad();
                 }
@@ -70,6 +71,10 @@ public:
 
     int getNumberOfNodesEvaluated() {
         return counter;
+    }
+
+    virtual double getPathCost() {
+        return cost;
     }
 };
 

@@ -28,7 +28,6 @@ public:
                 }
                 std::reverse(totalPoints.begin(),totalPoints.end());
                 finalPath= searchable->getPathSolution(totalPoints);
-                cout << cost << endl;
                 return finalPath;
             }
             neighbors = searchable->getAllPossibleStates(current);
@@ -55,5 +54,9 @@ public:
     }
     int getNumberOfNodesEvaluated() {
         return counter;
+    }
+
+    virtual double getPathCost() {
+        return cost;
     }
 };
