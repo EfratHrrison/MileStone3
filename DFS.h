@@ -7,6 +7,7 @@
 #include "Searcher.h"
 #include <stack>
 #include "string"
+#define NO_PATH "-1";
 using namespace std;
 
 template <class T>
@@ -52,7 +53,7 @@ public:
                 }
             }
         }
-        return "-1";
+        return NO_PATH;
     }
 
 
