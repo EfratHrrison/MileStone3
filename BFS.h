@@ -26,6 +26,7 @@ public:
                     totalPoints.push_back(current);
                     current = current->getDad();
                 }
+                //return the path to the client
                 std::reverse(totalPoints.begin(),totalPoints.end());
                 finalPath= searchable->getPathSolution(totalPoints);
                 return finalPath;
@@ -41,9 +42,16 @@ public:
                 }
             }
         }
+        //dead end -  which means we run into "walls" so there is no path
         return NO_PATH;
     }
 
+    /**
+     * this func checks if we already visited this state
+     * @param visited our queue of visited already
+     * @param current - we want to check if we visited him
+     * @return true if he was visite false otherwise
+     */
     bool wasVisited(vector<State<T> *> visited,State<T> *current ){
         for (auto state:visited) {
             if (current->Equal(state)) {
@@ -52,10 +60,18 @@ public:
         }
         return false;
     }
+    /**
+       * this function returns the number of nodes we evaluated in our algotithm
+       * @return num of nodes
+       */
     int getNumberOfNodesEvaluated() {
         return counter;
     }
 
+    /**
+      * this func returns the cost of the path we made
+      * @return the cost of our path
+      */
     virtual double getPathCost() {
         return cost;
     }
