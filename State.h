@@ -33,7 +33,7 @@ public:
     }
 
     void setDistance(double d) {
-        this->distance += d;
+        this->distance = d;
     }
 
     double getDistance() {
