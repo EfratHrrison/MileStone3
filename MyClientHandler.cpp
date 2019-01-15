@@ -34,6 +34,7 @@ void MyClientHandler::handleClient(int clientSock) {
                 perror("ERROR reading from socket");
                 exit(1);
             }
+            //if the client entered "end" that means we are done
             if(strcmp(buffer,"end")==0){
                 break;
             }
@@ -64,12 +65,15 @@ void MyClientHandler::handleClient(int clientSock) {
             s = vectorBuff[i];
             vector1= explode(s,',');
             for(int j=0 ; j< col; j++) {
+                //put each point in a state point vector to create a searchebla
                 State<Point>* state = new State<Point>(Point(i, j), stod(vector1[j]));
                 MatrixV.push_back(state);
             }
         }
         Searchable<Point>* searchableM = new Matrix(MatrixV,this->getStatePoint(MatrixV,initialP),this->getStatePoint(MatrixV,goalP));
 
+        //if we dond have the problem already
+        //solve the [roblem and save it in our cach manager
         if(!this->cacheManager->haveSolution(problem)) {
             solution = this->solver->solve(searchableM);
             this->cacheManager->updateSolutions(problem,solution);
@@ -80,18 +84,26 @@ void MyClientHandler::handleClient(int clientSock) {
             solution = this->cacheManager->getSolution(problem);
         }
         whriteBack = const_cast<char *>(solution.c_str());
-
-        printf("Here is the message after: %s\n", whriteBack);
-
+        //printf("Here is the message after: %s\n", whriteBack);
         n = write(clientSock, whriteBack, strlen(whriteBack));
-        cout<<solution<<endl;
         if (n < 0) {
             perror("ERROR writing to socket");
             exit(1);
         }
+
+        for (State<Point> *state : searchableM->getSearchable()) {
+            delete (state);
+        }
+        delete (searchableM);
+        break;
     }
 }
-
+/**
+ * this func retuns a spacific state point we need
+ * @param searchable - all our atate points
+ * @param initial the point we are looking for
+ * @return the state point
+ */
 State<Point>* MyClientHandler::getStatePoint(vector<State<Point> *> searchable, Point initial) {
     for (int i = 0; i < searchable.size(); ++i) {
         Point point(searchable[i]->getState().getX(), searchable[i]->getState().getY());
@@ -100,7 +112,12 @@ State<Point>* MyClientHandler::getStatePoint(vector<State<Point> *> searchable, 
         }
     }
 }
-
+/**
+ * this function split each line by a spacific char
+ * @param s our string - line
+ * @param c the char we are spliting according to him
+ * @return vector of strings after we splited the string
+ */
 vector<string> MyClientHandler::explode(string& s, const char& c) {
     string buff{""};
     vector<string> v;

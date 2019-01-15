@@ -4,13 +4,9 @@
 
 #ifndef MILESTONE3_MYPARALLELSERVER_H
 #define MILESTONE3_MYPARALLELSERVER_H
-#include <netinet/in.h>
-#include <strings.h>
-#include <unistd.h>
-#include <thread>
+#include <vector>
 #include "Server.h"
-#include "MyClientHandler.h"
-
+#include <pthread.h>
 class MyParallelServer : public server_side::Server {
 private:
     struct params {

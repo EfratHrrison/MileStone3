@@ -14,16 +14,27 @@
 #include "GetSolution.h"
 
 
-int main(int argc, char *args[]) {
-    MyParallelServer* d = new MyParallelServer();
-    Solver<Searchable<Point>*, string>* solver = new GetSolution(new AStar<Point>());
-    CacheManager* cacheManager = new FileCacheManager();
-    ClientHandler* ds = new MyClientHandler(solver, cacheManager);
-    d->open(std::atoi(args[1]),ds);
-    delete d;
-    delete solver;
-    delete cacheManager;
-    delete ds;
 
+namespace boot {
+    class Main {
+    public:
+        int main(int argc, char *argv[]) {
+            return 0;
+        }
+    };
+}
+
+int main(int argc, char *argv[]) {
+    boot::Main main1;
+    main1.main(argc, argv);
+    server_side::Server *d = new MyParallelServer();
+    Solver<Searchable<Point> *, string> *solver = new GetSolution(new AStar<Point>());
+    CacheManager *cacheManager = new FileCacheManager();
+    ClientHandler *ds = new MyClientHandler(solver, cacheManager);
+    d->open(stoi(argv[1]), ds);
+    delete (d);
+    delete (solver);
+    delete (cacheManager);
+    delete (ds);
     return 0;
 }

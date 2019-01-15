@@ -16,7 +16,6 @@ public:
     : Searchable(search, initial,goal){
     }
 
-
     State<Point>* getInitialState() {
         return this->initialState;
     }
@@ -37,11 +36,6 @@ public:
 
     double getAllCOst();
 
-    ~Matrix(){
-        for (auto point: searchable){
-            delete point;
-        }
-    }
 
 };
 
