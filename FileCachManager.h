@@ -16,6 +16,7 @@ class FileCacheManager:public CacheManager {
 fstream FileCacheM;
 public:
     FileCacheManager(){
+        pthread_mutex_init(&mutex, nullptr);
         loadFile();
     }
     void loadFile();

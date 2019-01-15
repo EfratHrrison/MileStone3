@@ -21,7 +21,6 @@ void MyClientHandler::handleClient(int clientSock) {
     vector<string> vector1;
     vector<string> vector2;
     vector<State<Point>*> MatrixV;
-    mutex mutexFile;
 
     ssize_t n;
     while(true) {
@@ -71,7 +70,6 @@ void MyClientHandler::handleClient(int clientSock) {
         }
         Searchable<Point>* searchableM = new Matrix(MatrixV,this->getStatePoint(MatrixV,initialP),this->getStatePoint(MatrixV,goalP));
 
-        mutexFile.lock();
         if(!this->cacheManager->haveSolution(problem)) {
             solution = this->solver->solve(searchableM);
             this->cacheManager->updateSolutions(problem,solution);
@@ -81,7 +79,6 @@ void MyClientHandler::handleClient(int clientSock) {
         else{
             solution = this->cacheManager->getSolution(problem);
         }
-        mutexFile.unlock();
         whriteBack = const_cast<char *>(solution.c_str());
 
         printf("Here is the message after: %s\n", whriteBack);
