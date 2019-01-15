@@ -11,7 +11,14 @@
  * @return true if we have it, false otherwise
  */
 bool FileCacheManager::haveSolution(string problem) {
-    return this->solutionsMap.find(problem) != this->solutionsMap.end();
+    pthread_mutex_lock(&mutex);
+    if(this->solutionsMap.find(problem) != this->solutionsMap.end()){
+        pthread_mutex_unlock(&mutex);
+        return true;
+    }else{
+        pthread_mutex_unlock(&mutex);
+        return false;
+    }
 }
 /**
  * this function returns the solution from the file
@@ -19,7 +26,10 @@ bool FileCacheManager::haveSolution(string problem) {
  * @return the solution
  */
 string FileCacheManager::getSolution(string problem){
-    return this->solutionsMap.find(problem)->second;
+    pthread_mutex_lock(&mutex);
+    string solution= this->solutionsMap.find(problem)->second;
+    pthread_mutex_unlock(&mutex);
+    return solution;
 }
 
 
@@ -46,7 +56,11 @@ void FileCacheManager::loadFile() {
         v.push_back(buff);
         problem=v[0];
         solution=v[1];
+        pthread_mutex_lock(&mutex);
         this->solutionsMap.insert(pair<string,string>(problem,solution));
+        pthread_mutex_unlock(&mutex);
+        solution="";
+        problem="";
     }
     FileCacheM.close();
 }
@@ -57,14 +71,14 @@ void FileCacheManager::addSolution(string problem, string solution) {
     if(!FileCacheM){
         throw "failed opening file";
     }
-    FileCacheM << problem << "$" <<solution << endl;
+    FileCacheM << problem << "$" <<solution << + "\n";
     FileCacheM.close();
-    //this->solutionsMap.insert(pair<string,string>(problem,solution));
 }
 
 
 void FileCacheManager::updateSolutions(string prob, string solution) {
-
+    pthread_mutex_lock(&mutex);
     this->solutionsMap.insert(pair<string, string>(prob, solution));
+    pthread_mutex_unlock(&mutex);
 }
 

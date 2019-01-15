@@ -17,14 +17,10 @@ void MyClientHandler::handleClient(int clientSock) {
     int clilen;
     char* chr;
     int x; int y;
-    int countMat;
     int countLines =0;
-    int rowMat;
-    bool flag=false;
     vector<string> vector1;
+    vector<string> vector2;
     vector<State<Point>*> MatrixV;
-    Matrix *matrix;
-    mutex mutexFile;
 
     ssize_t n;
     while(true) {
@@ -61,7 +57,9 @@ void MyClientHandler::handleClient(int clientSock) {
         Point goalP(x,y);
 
         int row=countLines;
-        int col=vectorBuff[0].size()-2;
+        string numOfClo=vectorBuff[0];
+        vector2= explode(numOfClo,',');
+        int col=vector2.size();
         for(int i=0 ; i< row ; i++) {
             s = vectorBuff[i];
             vector1= explode(s,',');
@@ -72,7 +70,6 @@ void MyClientHandler::handleClient(int clientSock) {
         }
         Searchable<Point>* searchableM = new Matrix(MatrixV,this->getStatePoint(MatrixV,initialP),this->getStatePoint(MatrixV,goalP));
 
-        mutexFile.lock();
         if(!this->cacheManager->haveSolution(problem)) {
             solution = this->solver->solve(searchableM);
             this->cacheManager->updateSolutions(problem,solution);
@@ -82,7 +79,6 @@ void MyClientHandler::handleClient(int clientSock) {
         else{
             solution = this->cacheManager->getSolution(problem);
         }
-        mutexFile.unlock();
         whriteBack = const_cast<char *>(solution.c_str());
 
         printf("Here is the message after: %s\n", whriteBack);
