@@ -144,7 +144,7 @@ public:
      */
     int getNumberOfNodesEvaluated()
     override{
-        return 0;
+        return evaluated;
     }
     /**
      * this func returns the cost of the path we made

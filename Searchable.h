@@ -34,6 +34,8 @@ public:
     virtual void setAllCost(double number) = 0;
 
     virtual double getAllCOst() = 0;
+
+    virtual ~Searchable() = default;
 };
 
 #endif //MILESTONE3_SEARCHABLE_H

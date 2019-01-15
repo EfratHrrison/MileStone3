@@ -15,6 +15,8 @@ public:
     virtual void open(int port, ClientHandler *handler) = 0;
 
     virtual void stop() = 0;
+
+    virtual ~ Server() = default;
 };
 
 #endif //MILESTONE2_SERVER_H

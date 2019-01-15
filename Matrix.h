@@ -11,8 +11,6 @@
 #include <string>
 
 class Matrix : public Searchable<class Point> {
-    //State<Point>* InitialState;
-    //vector<State<Point>*> vector1;
 public:
     Matrix(vector<State<Point>*> search, State<Point>* initial, State<Point>* goal)
     : Searchable(search, initial,goal){
@@ -38,6 +36,12 @@ public:
     void setAllCost(double number);
 
     double getAllCOst();
+
+    ~Matrix(){
+        for (auto point: searchable){
+            delete point;
+        }
+    }
 
 };
 

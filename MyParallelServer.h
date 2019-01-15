@@ -13,16 +13,20 @@
 
 class MyParallelServer : public server_side::Server {
 private:
-    vector<pthread_t> threads;
     struct params {
         ClientHandler* clientHandler;
         int sockfd;
     };
+    struct params *info = new params();
+    int serverId;
+    vector<pthread_t> threads;
+
 
 public:
-    void open(int port, ClientHandler *c);
-    void stop();
+    void open(int port, ClientHandler *c) override;
+    void stop() override;
     static void* parallelService (void* params);
+    ~MyParallelServer() override {delete info;}
 };
 
 
