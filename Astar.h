@@ -86,7 +86,6 @@ public:
         vector<State<T> *> path;
         string finalPath="";
         openList.push(searchable->getInitialState());
-        evaluated++;
         bool foundDest = false;
 
         while (!openList.empty()) {
@@ -97,7 +96,6 @@ public:
             closed.insert(n);
             //If n is the goal state
             if (n->Equal(searchable->getGoalState())) {
-                evaluated++;
                 //backtrace path to n (through recorded parents) and return path
                 path.push_back(n);
                 while (!n->Equal(searchable->getInitialState())) {

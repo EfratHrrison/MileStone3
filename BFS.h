@@ -17,9 +17,9 @@ public:
         vector<State<T>*> totalPoints;
         qu.push(searchable->getInitialState());
         visit.push_back(searchable->getInitialState());
-        counter++;
         while (!qu.empty()) {
             current = qu.front();
+            counter++;
             if(current->Equal(searchable->getGoalState())){
                 while (current != NULL) {
                     cost+=current->getCost();
@@ -37,7 +37,6 @@ public:
                 if (!wasVisited(visit,neighbor)) {
                     neighbor->setCameFrom(current);
                     visit.push_back(neighbor);
-                    counter++;
                     qu.push(neighbor);
                 }
             }

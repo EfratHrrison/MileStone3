@@ -22,14 +22,11 @@ public:
         vector<State<T> *> visited;
         State<T> *current;
         string finalPath="";
-
         qu.push(searchable->getInitialState());
-        counter++;
-
         while (!qu.empty()) {
             current = qu.top();
             qu.pop();
-
+            counter++;
             if (!wasVisited(visited, current)) {
                 visited.push_back(current);
             }
@@ -50,7 +47,6 @@ public:
                 if (!wasVisited(visited,neighbor)) {
                     neighbor->setCameFrom(current);
                     qu.push(neighbor);
-                    counter++;
                 }
             }
         }

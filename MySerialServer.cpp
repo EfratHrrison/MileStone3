@@ -48,7 +48,6 @@ void MySerialServer::listenTo(int sockfd, ClientHandler *handler) {
     int newsockfd, clilen;
     struct sockaddr_in cli_addr;
 
-//todo timeout
     while (true) {
         listen(sockfd, 5);
         clilen = sizeof(cli_addr);
