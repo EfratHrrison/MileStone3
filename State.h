@@ -25,9 +25,11 @@ public:
         totalCost=0;
         this->heur=0;
     }
+
     bool Equal(State *state1) {
         return (this->state==state1->state);
     }
+
     void setCameFrom(State<T>* dad) {
         this->cameFrom = dad;
     }
