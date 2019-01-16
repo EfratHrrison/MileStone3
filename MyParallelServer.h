@@ -4,27 +4,32 @@
 
 #ifndef MILESTONE3_MYPARALLELSERVER_H
 #define MILESTONE3_MYPARALLELSERVER_H
-#include <vector>
+#include <netinet/in.h>
+#include <strings.h>
+#include <unistd.h>
+#include <thread>
+#include <stack>
 #include "Server.h"
-#include <pthread.h>
-class MyParallelServer : public server_side::Server {
-private:
-    struct params {
-        ClientHandler* clientHandler;
-        int sockfd;
-    };
-    struct params *info = new params();
-    int serverId;
-    vector<pthread_t> threads;
+#include "MyClientHandler.h"
 
+using namespace server_side;
 
+class MyParallelServer : public Server {
+    stack<pthread_t> threads;
+    int sockfd{};
+    int port{};
+    ClientHandler* clientHandler{};
 public:
-    void open(int port, ClientHandler *c) override;
-    void stop() override;
-    static void* parallelService (void* params);
-    ~MyParallelServer() override {delete info;}
-};
+    void open(int port, ClientHandler *cH);
 
+    void stop();
+
+    static void *startThreadClient(void *data);
+
+    void start();
+
+    virtual ~MyParallelServer() = default;
+};
 
 
 #endif //MILESTONE3_MYPARALLELSERVER_H

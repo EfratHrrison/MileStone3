@@ -18,5 +18,9 @@ public:
     virtual string solve(Searchable<Point>* p) {
         return this->searcher->search(p);
     }
+
+    virtual ~GetSolution() {
+        delete (searcher);
+    }
 };
 #endif //MILESTONE3_GETSOLUTION_H
